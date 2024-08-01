@@ -54,9 +54,9 @@ impl Particle {
         Particle {
             height: 4.0,
             width: 4.0,
-            position: [x, y].into(),
-            velocity: [x_velocity, y_velocity].into(),
-            acceleration: [x_acceleration, y_acceleration].into(),
+            position: [x, y],
+            velocity: [x_velocity, y_velocity],
+            acceleration: [x_acceleration, y_acceleration],
             color: [1.0, 1.0, 1.0, 0.99],
         }
     }
@@ -92,13 +92,12 @@ impl World {
         for _ in 0..n.abs() {
             let mut to_delete = None;
 
-            let particle_iter = self.particles.iter().enumerate();
+            let mut particle_iter = self.particles.iter().enumerate();
 
-            for (i, particle) in particle_iter {
+            if let Some((i, particle)) in particle_iter.next() {
                 if particle.color[3] < 0.02 {
                     to_delete = Some(i);
                 }
-                break;
             }
             if let Some(i) = to_delete {
                 self.particles.remove(i);
