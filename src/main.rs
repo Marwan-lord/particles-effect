@@ -132,7 +132,7 @@ fn main() {
     let mut window: PistonWindow = WindowSettings::new("Particle", [width, height])
         .exit_on_esc(true)
         .build()
-        .expect("Could't make a window");
+        .expect("Could't make a window!");
 
     let mut world = World::new(width, height);
     world.add_shapes(1000);
