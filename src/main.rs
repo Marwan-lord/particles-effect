@@ -7,6 +7,7 @@ use std::time::Instant;
 
 #[global_allocator]
 static ALLOCATOR: ReportingAllocator = ReportingAllocator;
+
 struct ReportingAllocator;
 
 unsafe impl GlobalAlloc for ReportingAllocator {
@@ -54,9 +55,9 @@ impl Particle {
         Particle {
             height: 4.0,
             width: 4.0,
-            position: [x, y].into(),
-            velocity: [x_velocity, y_velocity].into(),
-            acceleration: [x_acceleration, y_acceleration].into(),
+            position: [x, y],
+            velocity: [x_velocity, y_velocity],
+            acceleration: [x_acceleration, y_acceleration],
             color: [1.0, 1.0, 1.0, 0.99],
         }
     }
@@ -82,7 +83,7 @@ impl World {
 
     fn add_shapes(&mut self, n: i32) {
         for _ in 0..n.abs() {
-            let particle = Particle::new(&self);
+            let particle = Particle::new(self);
             let boxed_particle = Box::new(particle);
             self.particles.push(boxed_particle);
         }
@@ -92,21 +93,23 @@ impl World {
         for _ in 0..n.abs() {
             let mut to_delete = None;
 
-            let particle_iter = self.particles.iter().enumerate();
+            let mut particle_iter = self.particles.iter().enumerate();
 
-            for (i, particle) in particle_iter {
+            if let Some((i, particle)) = particle_iter.next() {
                 if particle.color[3] < 0.02 {
                     to_delete = Some(i);
                 }
-                break;
             }
+
             if let Some(i) = to_delete {
                 self.particles.remove(i);
             } else {
                 self.particles.remove(0);
-            };
+            }
+
         }
     }
+
     fn update(&mut self) {
         let n = self.rng.gen_range(-3..=3);
 
