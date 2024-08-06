@@ -27,7 +27,7 @@ unsafe impl GlobalAlloc for ReportingAllocator {
 
 struct World {
     current_turn: u64,
-    particles: Vec<Box<Particle>>,
+    particles: Vec<Particle>,
     height: f64,
     width: f64,
     rng: ThreadRng,
@@ -74,7 +74,7 @@ impl World {
     fn new(width: f64, height: f64) -> World {
         World {
             current_turn: 0,
-            particles: Vec::<Box<Particle>>::new(),
+            particles: Vec::<Particle>::new(),
             height,
             width,
             rng: thread_rng(),
@@ -84,8 +84,7 @@ impl World {
     fn add_shapes(&mut self, n: i32) {
         for _ in 0..n.abs() {
             let particle = Particle::new(self);
-            let boxed_particle = Box::new(particle);
-            self.particles.push(boxed_particle);
+            self.particles.push(particle);
         }
     }
 
